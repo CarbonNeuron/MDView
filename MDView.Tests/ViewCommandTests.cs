@@ -64,14 +64,15 @@ public class ViewCommandTests
     }
 
     [Fact]
-    public void Execute_NoArgsNoStdin_ReturnsNonZero()
+    public void Execute_NoArgsWithRedirectedStdin_ReturnsZero()
     {
-        // When no file and no stdin redirect, should return error
-        // Note: in test environment, Console.IsInputRedirected may vary
+        // In test/CI environments, stdin is typically redirected (empty).
+        // The command reads empty stdin and renders it successfully.
+        if (!Console.IsInputRedirected)
+            return; // Skip when running interactively — would block on stdin
+
         var app = new CommandApp<ViewCommand>();
         var result = app.Run(Array.Empty<string>());
-        // Either reads from redirected stdin (test runner may redirect) or errors
-        // We just verify it doesn't throw
-        Assert.True(result == 0 || result == 1);
+        Assert.Equal(0, result);
     }
 }

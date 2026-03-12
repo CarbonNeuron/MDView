@@ -26,7 +26,9 @@ public class ViewCommand : Command<ViewSettings>
         }
         
         var rendered = MarkdownRenderer.Render(text);
-        AnsiConsole.Console.Profile.Width = Console.WindowWidth;
+        var width = Console.WindowWidth;
+        if (width > 0)
+            AnsiConsole.Console.Profile.Width = width;
         AnsiConsole.Write(rendered);
         return 0;
     }
