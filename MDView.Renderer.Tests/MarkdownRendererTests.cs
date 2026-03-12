@@ -52,6 +52,14 @@ public class MarkdownRendererTests
         Assert.Contains("Deep Heading", text);
     }
 
+    [Fact]
+    public void Render_HeadingWithLink_DoesNotThrow()
+    {
+        var result = MarkdownRenderer.Render("## See [docs](https://example.com)");
+        var text = RenderHelper.GetPlainText(result);
+        Assert.Contains("docs", text);
+    }
+
     // -- Paragraphs --
 
     [Fact]
@@ -114,6 +122,30 @@ public class MarkdownRendererTests
         var result = MarkdownRenderer.Render("[Click here](https://example.com)");
         var text = RenderHelper.GetPlainText(result);
         Assert.Contains("Click here", text);
+    }
+
+    [Fact]
+    public void Render_LinkWithSpacesInUrl_DoesNotThrow()
+    {
+        var result = MarkdownRenderer.Render("[link](http://example.com/path with spaces)");
+        var text = RenderHelper.GetPlainText(result);
+        Assert.Contains("link", text);
+    }
+
+    [Fact]
+    public void Render_LinkWithBracketsInUrl_DoesNotThrow()
+    {
+        var result = MarkdownRenderer.Render("[link](http://example.com/foo?a%5B0%5D=1)");
+        var text = RenderHelper.GetPlainText(result);
+        Assert.Contains("link", text);
+    }
+
+    [Fact]
+    public void Render_LinkWithQueryParams_DoesNotThrow()
+    {
+        var result = MarkdownRenderer.Render("[search](https://example.com/search?q=foo&bar=1)");
+        var text = RenderHelper.GetPlainText(result);
+        Assert.Contains("search", text);
     }
 
     // -- Fenced code blocks --
@@ -201,6 +233,19 @@ public class MarkdownRendererTests
         var text = RenderHelper.GetPlainText(result);
         Assert.Contains("Done task", text);
         Assert.Contains("Pending task", text);
+    }
+
+    [Fact]
+    public void Render_TaskList_CheckedAndUncheckedRenderDifferently()
+    {
+        var checkedMd = "- [x] Done";
+        var uncheckedMd = "- [ ] Todo";
+        var checkedText = RenderHelper.GetPlainText(MarkdownRenderer.Render(checkedMd));
+        var uncheckedText = RenderHelper.GetPlainText(MarkdownRenderer.Render(uncheckedMd));
+        // Strip the item text to compare just the prefix
+        var checkedPrefix = checkedText.Split("Done")[0];
+        var uncheckedPrefix = uncheckedText.Split("Todo")[0];
+        Assert.NotEqual(checkedPrefix, uncheckedPrefix);
     }
 
     // -- Blockquotes --

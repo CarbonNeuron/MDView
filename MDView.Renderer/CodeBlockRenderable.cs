@@ -83,7 +83,7 @@ internal sealed class CodeBlockRenderable : IRenderable
                         background,
                         segment.Style.Decoration);
                     yield return new Segment(segment.Text, style);
-                    lineWidth += segment.Text.Length;
+                    lineWidth += segment.Text.GetCellWidth();
                 }
             }
 

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 using TextMateSharp.Grammars;
@@ -194,8 +193,9 @@ public static class SyntaxHighlighter
         if (foreground > 0)
         {
             var hexColor = _theme.GetColor(foreground);
-            if (!string.IsNullOrEmpty(hexColor))
-                parts.Add(hexColor);
+            // Spectre only accepts #RRGGBB (7 chars); trim alpha from #RRGGBBAA
+            if (!string.IsNullOrEmpty(hexColor) && hexColor.Length > 0 && hexColor[0] == '#')
+                parts.Add(hexColor.Length > 7 ? hexColor.Substring(0, 7) : hexColor);
         }
 
         if (fontStyle != FontStyle.NotSet)
@@ -210,18 +210,4 @@ public static class SyntaxHighlighter
 
     private static string? ResolveExtension(string language) =>
         LanguageAliases.TryGetValue(language.Trim().ToLowerInvariant(), out var ext) ? ext : null;
-
-    private static Color HexToColor(string hex)
-    {
-        if (hex.Length > 0 && hex[0] == '#')
-            hex = hex.Substring(1);
-
-        if (hex.Length < 6)
-            return Color.Default;
-
-        var r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
-        var g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
-        var b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
-        return new Color(r, g, b);
-    }
 }

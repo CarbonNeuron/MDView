@@ -268,9 +268,17 @@ public static class MarkdownRenderer
     private static string RenderLink(LinkInline link)
     {
         var text = RenderInlineChildren(link);
-        return link.Url is not null
-            ? $"[blue underline link={Markup.Escape(link.Url)}]{text}[/]"
-            : text;
+        if (link.Url is null)
+            return text;
+
+        // Encode characters that break Spectre's markup tag parser:
+        // spaces (parsed as style separators), [ and ] (markup delimiters)
+        var safeUrl = link.Url
+            .Replace("%", "%25")
+            .Replace(" ", "%20")
+            .Replace("[", "%5B")
+            .Replace("]", "%5D");
+        return $"[blue underline link={Markup.Escape(safeUrl)}]{text}[/]";
     }
 
     private static string RenderCellMarkup(TableCell cell)

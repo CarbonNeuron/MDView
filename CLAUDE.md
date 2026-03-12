@@ -31,7 +31,7 @@ CI runs `dotnet test` on every push and pull request via GitHub Actions (`.githu
 
 ## Architecture
 
-The solution contains four projects, all using the `MDView` namespace:
+The solution contains four projects. The library and app projects use the `MDView` namespace; the test projects use `MDView.Tests`:
 
 | Project | Type | Description |
 |---------|------|-------------|
@@ -60,6 +60,6 @@ The solution contains four projects, all using the `MDView` namespace:
 
 ### Design Notes
 
-- `SyntaxHighlighter` uses a global lock (`Lock SyncRoot`) around all grammar/registry operations since TextMateSharp is not thread-safe.
+- `SyntaxHighlighter` uses a global lock (`object SyncRoot`) around all grammar/registry operations since TextMateSharp is not thread-safe. The lock is `object` (not `System.Threading.Lock`) because the renderer targets `netstandard2.0` and `net8.0` in addition to `net10.0`.
 - The `MarkdownRenderer.Render()` method is designed to be callable repeatedly on growing text (streaming use case) — it re-parses each time.
 - Inline rendering returns Spectre markup strings; block rendering returns `IRenderable` objects. The two levels compose at `ParagraphBlock` boundaries via `SafeMarkup()`.

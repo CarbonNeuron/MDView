@@ -30,16 +30,15 @@ public class FileExistsAttributeTests
     }
 
     [Fact]
-    public void Validate_NullValue_ReturnsSuccess()
+    public void Validate_NullPath_PassesValidation()
     {
-        // FileExistsAttribute allows null (the path is optional)
-        var attr = new FileExistsAttribute();
-        // Use reflection to test Validate with a null value
-        // Since CommandParameterContext is internal, we test via the app
-        // A null path means stdin mode, which the attribute should allow
+        // A null path (no args) should pass FileExistsAttribute validation
+        // and reach the stdin check instead. In CI with redirected stdin
+        // this returns 0; interactively it returns 1 from the "no input" error.
         var app = new CommandApp<ViewCommand>();
-        app.Configure(c => c.PropagateExceptions());
-        // No args = null path, should pass validation (fails on stdin check instead)
-        // This is tested via ViewCommandTests
+        var result = app.Run(Array.Empty<string>());
+        // If stdin is redirected (CI), validation passed and command ran.
+        // If not redirected, command returns 1 but NOT from a validation error.
+        Assert.True(result == 0 || result == 1);
     }
 }
