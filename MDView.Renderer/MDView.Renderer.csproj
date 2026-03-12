@@ -5,13 +5,32 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>MDView</RootNamespace>
+
+        <!-- NuGet package metadata -->
         <PackageId>MDView.Renderer</PackageId>
-        <Description>Terminal markdown renderer with syntax-highlighted code blocks using Spectre.Console</Description>
+        <Version>0.1.0</Version>
+        <Authors>CarbonNeuron</Authors>
+        <Description>Terminal markdown renderer with syntax-highlighted code blocks using Spectre.Console. Parses markdown via Markdig and produces rich IRenderable objects with TextMate-based syntax highlighting for 30+ languages.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/CarbonNeuron/MDView</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/CarbonNeuron/MDView</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>markdown;terminal;console;spectre;syntax-highlighting;renderer</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <!-- Reproducible builds -->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
         <InternalsVisibleTo Include="MDView.Renderer.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
 
     <ItemGroup>
