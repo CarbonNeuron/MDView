@@ -91,7 +91,7 @@ public static class SyntaxHighlighter
 
         lock (SyncRoot)
         {
-            return HighlightCore(code, language);
+            return HighlightCore(code, language!);
         }
     }
 
