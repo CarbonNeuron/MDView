@@ -14,11 +14,31 @@ dotnet run --project MDView -- file.md   # View a markdown file
 cat file.md | dotnet run --project MDView   # Pipe from stdin
 ```
 
-There are no tests or linting configured.
+## Testing
+
+```bash
+dotnet test                           # Run all tests
+dotnet test --project MDView.Renderer.Tests   # Renderer tests only
+dotnet test --project MDView.Tests            # CLI tests only
+```
+
+Tests use xUnit. There are two test projects:
+
+- **MDView.Renderer.Tests** — Tests for `MarkdownRenderer`, `SyntaxHighlighter`, `CodeBlockRenderable`, and internal renderables (`NonEmptyRenderable`, `PrefixedRenderable`). Uses a `RenderHelper` utility to extract plain text from Spectre `IRenderable` objects for assertions.
+- **MDView.Tests** — Tests for `ViewCommand`, `ViewSettings`, and `FileExistsAttribute`.
+
+CI runs `dotnet test` on every push and pull request via GitHub Actions (`.github/workflows/ci.yml`).
 
 ## Architecture
 
-The project is a single .NET 10.0 console app in the `MDView/` directory. All source files are in the `MDView` namespace.
+The solution contains four projects, all using the `MDView` namespace:
+
+| Project | Type | Description |
+|---------|------|-------------|
+| **MDView** | Console app | CLI tool — reads files/stdin and displays rendered output |
+| **MDView.Renderer** | Class library | Core renderer — parses markdown and produces Spectre.Console renderables |
+| **MDView.Renderer.Tests** | xUnit tests | Tests for the renderer library |
+| **MDView.Tests** | xUnit tests | Tests for the CLI |
 
 **Pipeline:** CLI parsing → file/stdin reading → Markdig AST parsing → recursive rendering to Spectre.Console renderables → terminal output.
 
