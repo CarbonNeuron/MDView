@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>MDView</RootNamespace>
+        <PackageId>MDView.Renderer</PackageId>
+        <Description>Terminal markdown renderer with syntax-highlighted code blocks using Spectre.Console</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Markdig" Version="0.45.0" />
+        <PackageReference Include="Spectre.Console" Version="0.54.0" />
+        <PackageReference Include="TextMateSharp" Version="2.0.3" />
+        <PackageReference Include="TextMateSharp.Grammars" Version="2.0.3" />
+    </ItemGroup>
+
+</Project>

@@ -29,8 +29,29 @@ cat README.md | dotnet run --project MDView
 dotnet build
 ```
 
+## Project Structure
+
+| Project | Description |
+|---------|-------------|
+| **MDView** | CLI tool — reads files/stdin and displays rendered output |
+| **MDView.Renderer** | Class library — parses markdown and produces Spectre.Console renderables, packageable as a NuGet package |
+
+## Using the Renderer as a Library
+
+```csharp
+using MDView;
+using Spectre.Console;
+
+var renderable = MarkdownRenderer.Render("# Hello, World!");
+AnsiConsole.Write(renderable);
+```
+
 ## Dependencies
 
-- [Markdig](https://github.com/xoofx/markdig) - Markdown parsing
-- [Spectre.Console](https://spectreconsole.net/) - Rich terminal rendering and CLI framework
-- [TextMateSharp](https://github.com/nicknash/TextMateSharp) - VS Code-style syntax highlighting
+- [Markdig](https://github.com/xoofx/markdig) — Markdown parsing
+- [Spectre.Console](https://spectreconsole.net/) — Rich terminal rendering and CLI framework
+- [TextMateSharp](https://github.com/nicknash/TextMateSharp) — VS Code-style syntax highlighting
+
+## License
+
+[MIT](LICENSE)

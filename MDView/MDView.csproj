@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Markdig" Version="0.45.0" />
-      <PackageReference Include="Spectre.Console" Version="0.54.0" />
-      <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
-      <PackageReference Include="TextMateSharp" Version="2.0.3" />
-      <PackageReference Include="TextMateSharp.Grammars" Version="2.0.3" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MDView.Renderer\MDView.Renderer.csproj" />
     </ItemGroup>
 
 </Project>
