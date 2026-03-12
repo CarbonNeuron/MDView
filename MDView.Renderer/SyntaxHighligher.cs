@@ -13,7 +13,7 @@ namespace MDView;
 /// </summary>
 public static class SyntaxHighlighter
 {
-    private static readonly Lock SyncRoot = new();
+    private static readonly object SyncRoot = new();
     private static ThemeName _themeName = ThemeName.DarkPlus;
     private static RegistryOptions _options = new(ThemeName.DarkPlus);
     private static TextMateSharp.Registry.Registry _registry = new(_options);
@@ -62,7 +62,7 @@ public static class SyntaxHighlighter
 
     /// <summary>All available built-in themes.</summary>
     public static IReadOnlyList<ThemeName> AvailableThemes { get; } =
-        Enum.GetValues<ThemeName>();
+        (ThemeName[])Enum.GetValues(typeof(ThemeName));
 
     /// <summary>Switch to a different theme. Takes effect on subsequent <see cref="Highlight"/> calls.</summary>
     public static void SetTheme(ThemeName theme)
@@ -209,20 +209,19 @@ public static class SyntaxHighlighter
     }
 
     private static string? ResolveExtension(string language) =>
-        LanguageAliases.GetValueOrDefault(language.Trim().ToLowerInvariant());
+        LanguageAliases.TryGetValue(language.Trim().ToLowerInvariant(), out var ext) ? ext : null;
 
     private static Color HexToColor(string hex)
     {
-        var span = hex.AsSpan();
-        if (span.Length > 0 && span[0] == '#')
-            span = span[1..];
+        if (hex.Length > 0 && hex[0] == '#')
+            hex = hex.Substring(1);
 
-        if (span.Length < 6)
+        if (hex.Length < 6)
             return Color.Default;
 
-        var r = byte.Parse(span[..2], NumberStyles.HexNumber);
-        var g = byte.Parse(span[2..4], NumberStyles.HexNumber);
-        var b = byte.Parse(span[4..6], NumberStyles.HexNumber);
+        var r = byte.Parse(hex.Substring(0, 2), NumberStyles.HexNumber);
+        var g = byte.Parse(hex.Substring(2, 2), NumberStyles.HexNumber);
+        var b = byte.Parse(hex.Substring(4, 2), NumberStyles.HexNumber);
         return new Color(r, g, b);
     }
 }
