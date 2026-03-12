@@ -135,7 +135,7 @@
       "mdview": {
         "type": "Project",
         "dependencies": {
-          "MDView.Renderer": "[1.0.0, )",
+          "MDView.Renderer": "[0.1.0, )",
           "Spectre.Console.Cli": "[0.53.1, )"
         }
       },
